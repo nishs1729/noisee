@@ -856,9 +856,6 @@
       shortcutsModal.classList.add('open');
     });
 
-    document.getElementById('footerShortcutsLink').addEventListener('click', () => {
-      shortcutsModal.classList.add('open');
-    });
 
     document.querySelectorAll('.modal-close, .modal-backdrop').forEach(el => {
       el.addEventListener('click', (e) => {
