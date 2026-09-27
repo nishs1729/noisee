@@ -437,7 +437,30 @@
       const w = canvas.width, h = canvas.height;
       ctx2d.clearRect(0, 0, w, h);
       const hasActive = getActiveSounds().length > 0;
-      const isCliamp  = document.documentElement.getAttribute('data-skin') === 'cliamp';
+      const root      = document.documentElement;
+      const skin      = root.getAttribute('data-skin');
+      const isCliamp  = skin === 'cliamp';
+      const dpr       = window.devicePixelRatio;
+
+      if (skin === 'slick') {
+        const ink = getComputedStyle(root).getPropertyValue('--text-primary').trim();
+        if (hasActive) {
+          analyserNode.getByteFrequencyData(dataArray);
+          const barCount = 64, step = w / barCount, barW = Math.max(1, 2 * dpr);
+          ctx2d.fillStyle = ink;
+          for (let i = 0; i < barCount; i++) {
+            const val = dataArray[Math.floor((i / barCount) * (bufLen / 2))] / 255;
+            const bh  = Math.max(dpr, val * h * 0.9);
+            ctx2d.fillRect(i * step + (step - barW) / 2, (h - bh) / 2, barW, bh);
+          }
+        } else {
+          ctx2d.globalAlpha = 0.2;
+          ctx2d.fillStyle   = ink;
+          ctx2d.fillRect(0, Math.floor(h / 2), w, Math.max(1, dpr));
+          ctx2d.globalAlpha = 1;
+        }
+        return;
+      }
 
       if (hasActive) {
         analyserNode.getByteFrequencyData(dataArray);
@@ -607,40 +630,8 @@
   }
 
   // =========================================================================
-  // URL Hash Share / Import
+  // URL Hash Import
   // =========================================================================
-
-  function getShareUrl() {
-    const params = [];
-    for (const s of Object.values(sounds)) {
-      if (s.playing && s.vol > 0) params.push(`${s.id}=${Math.round(s.vol * 100)}`);
-    }
-    params.push(`master=${Math.round((parseFloat(dom.masterVolume?.value) || 0.5) * 100)}`);
-    const url = new URL(window.location.href);
-    url.hash  = params.join('&');
-    return url.toString();
-  }
-
-  function copyShareLink() {
-    const url = getShareUrl();
-    if (navigator.clipboard && window.isSecureContext) {
-      navigator.clipboard.writeText(url)
-        .then(() => showToast('🔗 Soundscape link copied to clipboard!'))
-        .catch(() => showShareFallback(url));
-    } else {
-      showShareFallback(url);
-    }
-  }
-
-  function showShareFallback(url) {
-    const modal    = document.getElementById('shareUrlModal');
-    const urlInput = document.getElementById('shareUrlInput');
-    if (modal && urlInput) {
-      urlInput.value = url;
-      modal.classList.add('open');
-      setTimeout(() => { urlInput.select(); urlInput.focus(); }, 80);
-    }
-  }
 
   function loadMixFromHash() {
     if (!window.location.hash || window.location.hash.length < 2) return false;
@@ -970,7 +961,6 @@
     document.getElementById('btnMute').addEventListener('click', toggleMasterMute);
     document.getElementById('btnMasterPlay').addEventListener('click', toggleMasterPlay);
     document.getElementById('btnRandomize').addEventListener('click', randomizeMix);
-    document.getElementById('btnShareMix').addEventListener('click', copyShareLink);
     document.getElementById('btnSavePreset').addEventListener('click', saveCurrentAsPreset);
     document.getElementById('btnResetVolumes')?.addEventListener('click', resetAllVolumes);
 
@@ -1013,7 +1003,6 @@
     const timerModal      = document.getElementById('timerModal');
     const shortcutsModal  = document.getElementById('shortcutsModal');
     const presetNameModal = document.getElementById('presetNameModal');
-    const shareUrlModal   = document.getElementById('shareUrlModal');
 
     document.getElementById('btnOpenTimer').addEventListener('click', () => timerModal.classList.add('open'));
     document.getElementById('btnOpenShortcuts').addEventListener('click', () => shortcutsModal.classList.add('open'));
@@ -1033,18 +1022,6 @@
       nameInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') { confirmSavePreset(nameInput.value); presetNameModal.classList.remove('open'); }
       });
-    }
-
-    if (shareUrlModal) {
-      const urlInput = document.getElementById('shareUrlInput');
-      const btnCopy  = document.getElementById('btnCopyShareUrl');
-      if (btnCopy && urlInput) {
-        btnCopy.addEventListener('click', () => {
-          urlInput.select();
-          try { document.execCommand('copy'); showToast('🔗 Link copied!'); } catch (_) {}
-          shareUrlModal.classList.remove('open');
-        });
-      }
     }
 
     const tabs = document.querySelectorAll('.modal-tab-btn');
