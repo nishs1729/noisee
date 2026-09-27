@@ -319,6 +319,12 @@ body::after {
   padding: 4px 10px;
   border-radius: var(--radius-full);
   border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
+}
+
+.visualizer-container.playing .visualizer-overlay {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .visualizer-dot {

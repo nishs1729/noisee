@@ -366,7 +366,7 @@
       dom.btnMasterPlay.setAttribute('aria-label', 'Pause Master Mix');
       dom.masterStatus.textContent = `${active.length} sound${active.length === 1 ? '' : 's'} playing`;
       dom.visualizerContainer.classList.add('playing');
-      dom.visualizerStatusText.textContent = 'Active Soundscape';
+      dom.visualizerStatusText.textContent = '';
       document.title = `▶ Noisee — ${active.map(s => s.name).join(' + ')}`;
     } else {
       dom.btnMasterPlay.classList.remove('playing');
