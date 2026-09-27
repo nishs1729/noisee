@@ -52,6 +52,7 @@
   const LS_VOL = 'noisee_master_vol';
   const LS_ORDER = 'noisee_sound_order';
   const LS_CUSTOM_PRESETS = 'noisee_custom_presets';
+  const LS_THEME = 'noisee_theme';
 
   // --- Helper: Get or Init Audio Context ---
   function getAudioContext() {
@@ -260,7 +261,7 @@
     const max = parseFloat(slider.max) || 1;
     const val = parseFloat(slider.value) || 0;
     const pct = ((val - min) / (max - min)) * 100;
-    slider.style.background = `linear-gradient(to right, #38bdf8 0%, #818cf8 ${pct}%, rgba(255, 255, 255, 0.1) ${pct}%, rgba(255, 255, 255, 0.1) 100%)`;
+    slider.style.setProperty('--slider-pct', `${pct}%`);
   }
 
   // --- Visualizer ---
@@ -314,7 +315,8 @@
       } else {
         // Resting ambient breathing wave
         waveOffset += 0.02;
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        ctx.strokeStyle = isLight ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.08)';
         ctx.lineWidth = 2 * window.devicePixelRatio;
         ctx.beginPath();
         for (let x = 0; x < width; x += 4) {
@@ -621,6 +623,8 @@
   }
 
   // --- Drag and Drop Reordering ---
+  let isCardDragging = false;
+
   function initDragAndDrop() {
     const grid = document.getElementById('soundsGrid');
     let draggedCard = null;
@@ -628,23 +632,30 @@
     grid.addEventListener('dragstart', (e) => {
       const card = e.target.closest('.sound-card');
       if (!card) return;
+
+      // If drag started on an input, slider, or button, cancel card drag
+      if (
+        e.target.tagName === 'INPUT' ||
+        e.target.closest('input') ||
+        e.target.closest('button') ||
+        e.target.closest('.slider-container')
+      ) {
+        e.preventDefault();
+        return;
+      }
+
       draggedCard = card;
+      isCardDragging = true;
       card.classList.add('dragging');
       e.dataTransfer.effectAllowed = 'move';
       e.dataTransfer.setData('text/plain', card.dataset.id);
     });
 
-    grid.addEventListener('dragend', () => {
-      if (draggedCard) {
-        draggedCard.classList.remove('dragging');
-        draggedCard = null;
-      }
-      grid.querySelectorAll('.sound-card').forEach(c => c.classList.remove('drag-over'));
-      saveSoundOrder();
-    });
-
     grid.addEventListener('dragover', (e) => {
       e.preventDefault();
+      if (!draggedCard) return;
+      e.dataTransfer.dropEffect = 'move';
+
       const targetCard = e.target.closest('.sound-card');
       if (!targetCard || targetCard === draggedCard) return;
 
@@ -654,6 +665,8 @@
     });
 
     grid.addEventListener('dragenter', (e) => {
+      e.preventDefault();
+      if (!draggedCard) return;
       const targetCard = e.target.closest('.sound-card');
       if (targetCard && targetCard !== draggedCard) {
         targetCard.classList.add('drag-over');
@@ -666,6 +679,27 @@
         targetCard.classList.remove('drag-over');
       }
     });
+
+    grid.addEventListener('drop', (e) => {
+      e.preventDefault();
+      cleanupDrag();
+    });
+
+    grid.addEventListener('dragend', () => {
+      cleanupDrag();
+    });
+
+    function cleanupDrag() {
+      if (draggedCard) {
+        draggedCard.classList.remove('dragging');
+        draggedCard = null;
+      }
+      grid.querySelectorAll('.sound-card').forEach(c => c.classList.remove('drag-over'));
+      saveSoundOrder();
+      setTimeout(() => {
+        isCardDragging = false;
+      }, 60);
+    }
   }
 
   function saveSoundOrder() {
@@ -763,19 +797,48 @@
         toggleSound(sounds[def.id]);
       });
 
+      // Slider interaction isolation (Chrome & Firefox smoothness)
+      sliderEl.setAttribute('draggable', 'false');
+      const disableCardDrag = () => cardEl.setAttribute('draggable', 'false');
+      sliderEl.addEventListener('pointerdown', (e) => {
+        e.stopPropagation();
+        disableCardDrag();
+      });
+      sliderEl.addEventListener('mousedown', (e) => {
+        e.stopPropagation();
+        disableCardDrag();
+      });
+      sliderEl.addEventListener('click', (e) => e.stopPropagation());
+
       sliderEl.addEventListener('input', (e) => {
         setSoundVolume(sounds[def.id], e.target.value, false);
         updateSliderFill(e.target);
       });
 
-      // Quick-click card (except on controls) toggles sound
+      // Quick-click card (except on controls or drag handle) toggles sound
       cardEl.addEventListener('click', (e) => {
-        if (!e.target.closest('input') && !e.target.closest('button')) {
-          toggleSound(sounds[def.id]);
+        if (isCardDragging) return;
+        if (
+          e.target.closest('input') ||
+          e.target.closest('button') ||
+          e.target.closest('.slider-container') ||
+          e.target.closest('.sound-ctrl-row') ||
+          e.target.closest('.drag-handle')
+        ) {
+          return;
         }
+        toggleSound(sounds[def.id]);
       });
 
       updateSliderFill(sliderEl);
+    });
+
+    // Re-enable draggable on mouse/pointer release
+    window.addEventListener('pointerup', () => {
+      document.querySelectorAll('.sound-card').forEach(c => c.setAttribute('draggable', 'true'));
+    });
+    window.addEventListener('mouseup', () => {
+      document.querySelectorAll('.sound-card').forEach(c => c.setAttribute('draggable', 'true'));
     });
 
     applySavedOrder();
@@ -787,6 +850,10 @@
     const savedMasterVol = localStorage.getItem(LS_VOL);
     const initialMasterVol = savedMasterVol !== null ? parseFloat(savedMasterVol) : 0.5;
 
+    masterSlider.setAttribute('draggable', 'false');
+    masterSlider.addEventListener('mousedown', (e) => e.stopPropagation());
+    masterSlider.addEventListener('pointerdown', (e) => e.stopPropagation());
+
     masterSlider.value = initialMasterVol;
     masterVolText.textContent = `${Math.round(initialMasterVol * 100)}%`;
     updateSliderFill(masterSlider);
@@ -797,7 +864,6 @@
 
     document.getElementById('btnMute').addEventListener('click', toggleMasterMute);
     document.getElementById('btnMasterPlay').addEventListener('click', toggleMasterPlay);
-    document.getElementById('btnStopAll').addEventListener('click', stopAllSounds);
     document.getElementById('btnRandomize').addEventListener('click', randomizeMix);
     document.getElementById('btnShareMix').addEventListener('click', copyShareLink);
     document.getElementById('btnSavePreset').addEventListener('click', saveCurrentAsPreset);
@@ -821,6 +887,9 @@
         }
       }
     });
+
+    // Initialize Theme
+    initTheme();
 
     // Modals setup
     initModals();
@@ -921,10 +990,53 @@
     document.getElementById('btnResetPomodoro').addEventListener('click', resetPomodoro);
   }
 
+  // --- Theme Management ---
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem(LS_THEME, theme);
+
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]');
+    if (metaThemeColor) {
+      metaThemeColor.setAttribute('content', theme === 'light' ? '#f8fafc' : '#07090e');
+    }
+  }
+
+  function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    applyTheme(newTheme);
+    showToast(newTheme === 'light' ? '☀️ Switched to Light Mode' : '🌙 Switched to Dark Mode');
+  }
+
+  function initTheme() {
+    const savedTheme = localStorage.getItem(LS_THEME);
+    if (savedTheme) {
+      applyTheme(savedTheme);
+    } else {
+      const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      applyTheme(prefersLight ? 'light' : 'dark');
+    }
+
+    const themeToggleBtn = document.getElementById('btnToggleTheme');
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', toggleTheme);
+    }
+  }
+
   // --- Keyboard Shortcuts ---
   function initKeyboardShortcuts() {
     window.addEventListener('keydown', (e) => {
-      // Don't trigger when inside inputs
+      // Escape key closes any open modal even if inside an input
+      if (e.key === 'Escape') {
+        const openModals = document.querySelectorAll('.modal-backdrop.open');
+        if (openModals.length > 0) {
+          e.preventDefault();
+          openModals.forEach(m => m.classList.remove('open'));
+          return;
+        }
+      }
+
+      // Don't trigger other shortcuts when inside inputs
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
         return;
       }
@@ -941,6 +1053,8 @@
       } else if (e.key === 't' || e.key === 'T') {
         const modal = document.getElementById('timerModal');
         modal.classList.toggle('open');
+      } else if (e.key === 'd' || e.key === 'D') {
+        toggleTheme();
       } else if (e.key === '?') {
         const modal = document.getElementById('shortcutsModal');
         modal.classList.toggle('open');

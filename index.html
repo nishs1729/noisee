@@ -62,6 +62,23 @@
           <span>Share</span>
         </button>
 
+        <button id="btnToggleTheme" class="header-btn" title="Toggle Light/Dark Theme (D)" aria-label="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
         <button id="btnOpenShortcuts" class="header-btn" title="Keyboard Shortcuts (?)">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
@@ -92,7 +109,6 @@
             </svg>
           </button>
           <div class="master-meta">
-            <div class="master-title">Master Output</div>
             <div id="masterStatus" class="master-status">Ready to play</div>
           </div>
         </div>
@@ -127,13 +143,6 @@
             </svg>
             <span>Save Mix</span>
           </button>
-
-          <button id="btnStopAll" class="btn-action btn-stop-all" title="Stop All Sounds (S)">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="4" y="4" width="16" height="16" rx="2"></rect>
-            </svg>
-            <span>Stop All</span>
-          </button>
         </div>
       </div>
     </section>
@@ -144,7 +153,6 @@
         <h2 class="section-title">
           <span>Ambient Elements</span>
         </h2>
-        <span class="section-hint">Drag cards to reorder • Click anywhere on card to toggle</span>
       </div>
 
       <div id="soundsGrid" class="sounds-grid">
@@ -476,6 +484,14 @@
           <div class="shortcut-item">
             <span class="shortcut-desc">Toggle individual sounds (1 to 8)</span>
             <kbd class="kbd-badge">1 - 8</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Close open pop-up panel</span>
+            <kbd class="kbd-badge">Esc</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Toggle Light / Dark mode</span>
+            <kbd class="kbd-badge">D</kbd>
           </div>
           <div class="shortcut-item">
             <span class="shortcut-desc">Show this shortcuts guide</span>
