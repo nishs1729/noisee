@@ -1,4 +1,4 @@
-const CACHE_NAME = 'noisee-cache-v1';
+const CACHE_NAME = 'noisee-cache-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -13,7 +13,10 @@ const ASSETS_TO_CACHE = [
   './assets/sounds/birds.mp3',
   './assets/sounds/owl.mp3',
   './assets/sounds/cicada.mp3',
-  './assets/sounds/sea.mp3'
+  './assets/sounds/sea.mp3',
+  './assets/sounds/thunder.mp3',
+  './assets/sounds/forest.mp3',
+  './assets/sounds/train.mp3'
 ];
 
 self.addEventListener('install', (event) => {

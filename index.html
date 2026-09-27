@@ -7,6 +7,20 @@
   <meta name="description" content="Mix soothing background soundscapes to focus, relax, and sleep. Standalone ambient sound generator with presets, timers, and offline support." />
   <meta name="theme-color" content="#07090e" />
 
+  <!-- Open Graph / Social -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:title"       content="Noisee — Ambient Soundscape Studio" />
+  <meta property="og:description" content="Mix rain, fire, wind and more into the perfect ambient soundscape for focus, sleep and relaxation. 100% offline." />
+  <meta property="og:image"       content="assets/favicon.svg" />
+  <meta name="twitter:card"       content="summary" />
+  <meta name="twitter:title"      content="Noisee — Ambient Soundscape Studio" />
+  <meta name="twitter:description" content="Mix soothing background soundscapes. Free & offline." />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="manifest" href="manifest.json" />
   <link rel="stylesheet" href="css/style.css" />
@@ -18,11 +32,11 @@
       <div class="brand">
         <div class="brand-icon">
           <svg viewBox="0 0 24 24">
-            <rect x="2" y="10" width="3" height="4" rx="1.5"></rect>
-            <rect x="7" y="6" width="3" height="12" rx="1.5"></rect>
-            <rect x="12" y="3" width="3" height="18" rx="1.5"></rect>
-            <rect x="17" y="7" width="3" height="10" rx="1.5"></rect>
-            <rect x="22" y="10" width="3" height="4" rx="1.5"></rect>
+            <rect x="2"  y="10" width="3" height="4"  rx="1.5"></rect>
+            <rect x="7"  y="6"  width="3" height="12" rx="1.5"></rect>
+            <rect x="12" y="3"  width="3" height="18" rx="1.5"></rect>
+            <rect x="17" y="7"  width="3" height="10" rx="1.5"></rect>
+            <rect x="22" y="10" width="3" height="4"  rx="1.5"></rect>
           </svg>
         </div>
         <div class="brand-text">
@@ -38,7 +52,7 @@
           <span id="timerBadgeText">00:00</span>
         </button>
 
-        <button id="btnOpenTimer" class="header-btn" title="Open Timer & Pomodoro">
+        <button id="btnOpenTimer" class="header-btn" title="Open Timer &amp; Pomodoro">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"></circle>
             <polyline points="12 6 12 12 16 14"></polyline>
@@ -53,11 +67,11 @@
 
         <button id="btnShareMix" class="header-btn" title="Copy Shareable Link">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="18" cy="5" r="3"></circle>
-            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="5"  r="3"></circle>
+            <circle cx="6"  cy="12" r="3"></circle>
             <circle cx="18" cy="19" r="3"></circle>
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            <line x1="8.59"  y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51"  x2="8.59"  y2="10.49"></line>
           </svg>
           <span>Share</span>
         </button>
@@ -65,14 +79,14 @@
         <button id="btnToggleTheme" class="header-btn" title="Toggle Light/Dark Theme (D)" aria-label="Toggle theme">
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="1"  x2="12" y2="3"></line>
             <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="4.22"  y1="4.22"  x2="5.64"  y2="5.64"></line>
             <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="1"  y1="12" x2="3"  y2="12"></line>
             <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            <line x1="4.22"  y1="19.78" x2="5.64"  y2="18.36"></line>
+            <line x1="18.36" y1="5.64"  x2="19.78" y2="4.22"></line>
           </svg>
           <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -153,6 +167,13 @@
         <h2 class="section-title">
           <span>Ambient Elements</span>
         </h2>
+        <button id="btnResetVolumes" class="btn-action btn-reset" title="Reset all volumes to defaults">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 .49-4.5"></path>
+          </svg>
+          <span>Reset</span>
+        </button>
       </div>
 
       <div id="soundsGrid" class="sounds-grid">
@@ -165,9 +186,7 @@
               <div class="sound-name">
                 <span>Rain</span>
                 <div class="mini-equalizer">
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
                 </div>
               </div>
               <span class="track-vol-text">60%</span>
@@ -192,9 +211,7 @@
               <div class="sound-name">
                 <span>River</span>
                 <div class="mini-equalizer">
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
                 </div>
               </div>
               <span class="track-vol-text">50%</span>
@@ -219,9 +236,7 @@
               <div class="sound-name">
                 <span>Wind</span>
                 <div class="mini-equalizer">
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
                 </div>
               </div>
               <span class="track-vol-text">40%</span>
@@ -246,9 +261,7 @@
               <div class="sound-name">
                 <span>Fire</span>
                 <div class="mini-equalizer">
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
                 </div>
               </div>
               <span class="track-vol-text">70%</span>
@@ -273,9 +286,7 @@
               <div class="sound-name">
                 <span>Birds</span>
                 <div class="mini-equalizer">
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
                 </div>
               </div>
               <span class="track-vol-text">50%</span>
@@ -300,9 +311,7 @@
               <div class="sound-name">
                 <span>Night Birds</span>
                 <div class="mini-equalizer">
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
                 </div>
               </div>
               <span class="track-vol-text">40%</span>
@@ -327,9 +336,7 @@
               <div class="sound-name">
                 <span>Cicada</span>
                 <div class="mini-equalizer">
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
                 </div>
               </div>
               <span class="track-vol-text">30%</span>
@@ -354,9 +361,7 @@
               <div class="sound-name">
                 <span>Sea</span>
                 <div class="mini-equalizer">
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
-                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
                 </div>
               </div>
               <span class="track-vol-text">60%</span>
@@ -367,6 +372,106 @@
               </button>
               <div class="slider-container">
                 <input type="range" min="0" max="1" step="0.01" value="0.6" class="modern-slider sound-vol-slider" aria-label="Sea volume" />
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Thunder -->
+        <article class="sound-card" draggable="true" data-id="thunder">
+          <div class="drag-handle" title="Drag to reorder"></div>
+          <div class="sound-icon-box">⛈️</div>
+          <div class="sound-controls">
+            <div class="sound-info">
+              <div class="sound-name">
+                <span>Thunder</span>
+                <div class="mini-equalizer">
+                  <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                </div>
+              </div>
+              <span class="track-vol-text">65%</span>
+            </div>
+            <div class="sound-ctrl-row">
+              <button class="btn-track-play" aria-label="Play Thunder">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="slider-container">
+                <input type="range" min="0" max="1" step="0.01" value="0.65" class="modern-slider sound-vol-slider" aria-label="Thunder volume" />
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Forest -->
+        <article class="sound-card" draggable="true" data-id="forest">
+          <div class="drag-handle" title="Drag to reorder"></div>
+          <div class="sound-icon-box">🌿</div>
+          <div class="sound-controls">
+            <div class="sound-info">
+              <div class="sound-name">
+                <span>Forest</span>
+                <div class="mini-equalizer">
+                  <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                </div>
+              </div>
+              <span class="track-vol-text">50%</span>
+            </div>
+            <div class="sound-ctrl-row">
+              <button class="btn-track-play" aria-label="Play Forest">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="slider-container">
+                <input type="range" min="0" max="1" step="0.01" value="0.5" class="modern-slider sound-vol-slider" aria-label="Forest volume" />
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Train -->
+        <article class="sound-card" draggable="true" data-id="train">
+          <div class="drag-handle" title="Drag to reorder"></div>
+          <div class="sound-icon-box">🚂</div>
+          <div class="sound-controls">
+            <div class="sound-info">
+              <div class="sound-name">
+                <span>Train</span>
+                <div class="mini-equalizer">
+                  <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                </div>
+              </div>
+              <span class="track-vol-text">40%</span>
+            </div>
+            <div class="sound-ctrl-row">
+              <button class="btn-track-play" aria-label="Play Train">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="slider-container">
+                <input type="range" min="0" max="1" step="0.01" value="0.4" class="modern-slider sound-vol-slider" aria-label="Train volume" />
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Brown Noise (synthesized — no file needed) -->
+        <article class="sound-card" draggable="true" data-id="brown-noise">
+          <div class="drag-handle" title="Drag to reorder"></div>
+          <div class="sound-icon-box">〰️</div>
+          <div class="sound-controls">
+            <div class="sound-info">
+              <div class="sound-name">
+                <span>Brown Noise</span>
+                <div class="mini-equalizer">
+                  <div class="eq-bar"></div><div class="eq-bar"></div><div class="eq-bar"></div>
+                </div>
+              </div>
+              <span class="track-vol-text">50%</span>
+            </div>
+            <div class="sound-ctrl-row">
+              <button class="btn-track-play" aria-label="Play Brown Noise">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="slider-container">
+                <input type="range" min="0" max="1" step="0.01" value="0.5" class="modern-slider sound-vol-slider" aria-label="Brown Noise volume" />
               </div>
             </div>
           </div>
@@ -382,7 +487,7 @@
       <div class="modal-header">
         <h2 id="timerModalTitle" class="modal-title">
           <span>⏱️</span>
-          <span>Timers & Productivity</span>
+          <span>Timers &amp; Productivity</span>
         </h2>
         <button class="modal-close" aria-label="Close modal">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
@@ -397,7 +502,6 @@
 
         <!-- Sleep Timer Pane -->
         <div id="tabSleep" class="tab-pane active">
-          <!-- Active countdown if running -->
           <div id="sleepCountdownDisplay" class="active-timer-card" style="display: none;">
             <div id="sleepTimeRemaining" class="timer-digits">00:00</div>
             <div class="timer-label">Time remaining until gentle stop</div>
@@ -428,14 +532,33 @@
 
         <!-- Pomodoro Pane -->
         <div id="tabPomodoro" class="tab-pane">
-          <div class="active-timer-card">
-            <div id="pomodoroTimeDigits" class="timer-digits">25:00</div>
-            <div id="pomodoroModeLabel" class="timer-label">Focus Session</div>
+
+          <!-- Configurable durations -->
+          <div class="pomodoro-config">
+            <label class="pomodoro-config-label">
+              <span>Focus</span>
+              <input id="pomodoroWorkMinutes" type="number" min="1" max="120" value="25" class="pomodoro-duration-input" />
+              <span>min</span>
+            </label>
+            <span class="pomodoro-config-sep">•</span>
+            <label class="pomodoro-config-label">
+              <span>Break</span>
+              <input id="pomodoroBreakMinutes" type="number" min="1" max="60" value="5" class="pomodoro-duration-input" />
+              <span>min</span>
+            </label>
           </div>
 
-          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; text-align: center;">
-            25 minutes of deep focus followed by a 5-minute rejuvenating break.
-          </p>
+          <!-- SVG Progress Ring -->
+          <div class="pomodoro-ring-wrap">
+            <svg class="pomodoro-ring-svg" viewBox="0 0 128 128" aria-hidden="true">
+              <circle class="ring-bg"       cx="64" cy="64" r="54" />
+              <circle class="ring-progress" cx="64" cy="64" r="54" id="pomodoroProgressRing" />
+            </svg>
+            <div class="pomodoro-ring-inner">
+              <div id="pomodoroTimeDigits" class="timer-digits pomodoro-digits">25:00</div>
+              <div id="pomodoroModeLabel" class="timer-label">Focus Session</div>
+            </div>
+          </div>
 
           <div style="display: flex; gap: 10px; justify-content: center;">
             <button id="btnStartPomodoro" class="btn-primary">Start Focus</button>
@@ -458,45 +581,64 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
-
       <div class="modal-body">
         <div class="shortcut-list">
-          <div class="shortcut-item">
-            <span class="shortcut-desc">Master Play / Pause active mix</span>
-            <kbd class="kbd-badge">Space</kbd>
-          </div>
-          <div class="shortcut-item">
-            <span class="shortcut-desc">Master Mute / Unmute</span>
-            <kbd class="kbd-badge">M</kbd>
-          </div>
-          <div class="shortcut-item">
-            <span class="shortcut-desc">Surprise / Randomize mix</span>
-            <kbd class="kbd-badge">R</kbd>
-          </div>
-          <div class="shortcut-item">
-            <span class="shortcut-desc">Stop all playing sounds</span>
-            <kbd class="kbd-badge">S</kbd>
-          </div>
-          <div class="shortcut-item">
-            <span class="shortcut-desc">Open Timers (Sleep & Pomodoro)</span>
-            <kbd class="kbd-badge">T</kbd>
-          </div>
-          <div class="shortcut-item">
-            <span class="shortcut-desc">Toggle individual sounds (1 to 8)</span>
-            <kbd class="kbd-badge">1 - 8</kbd>
-          </div>
-          <div class="shortcut-item">
-            <span class="shortcut-desc">Close open pop-up panel</span>
-            <kbd class="kbd-badge">Esc</kbd>
-          </div>
-          <div class="shortcut-item">
-            <span class="shortcut-desc">Toggle Light / Dark mode</span>
-            <kbd class="kbd-badge">D</kbd>
-          </div>
-          <div class="shortcut-item">
-            <span class="shortcut-desc">Show this shortcuts guide</span>
-            <kbd class="kbd-badge">?</kbd>
-          </div>
+          <div class="shortcut-item"><span class="shortcut-desc">Master Play / Pause active mix</span><kbd class="kbd-badge">Space</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-desc">Master Mute / Unmute</span><kbd class="kbd-badge">M</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-desc">Surprise / Randomize mix</span><kbd class="kbd-badge">R</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-desc">Stop all playing sounds</span><span style="display:flex;gap:6px;"><kbd class="kbd-badge">S</kbd><kbd class="kbd-badge">0</kbd></span></div>
+          <div class="shortcut-item"><span class="shortcut-desc">Open Timers (Sleep &amp; Pomodoro)</span><kbd class="kbd-badge">T</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-desc">Toggle individual sounds</span><kbd class="kbd-badge">1 – 8</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-desc">Solo a sound (Alt + click card)</span><kbd class="kbd-badge">Alt+click</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-desc">Close open pop-up panel</span><kbd class="kbd-badge">Esc</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-desc">Toggle Light / Dark mode</span><kbd class="kbd-badge">D</kbd></div>
+          <div class="shortcut-item"><span class="shortcut-desc">Show this shortcuts guide</span><kbd class="kbd-badge">?</kbd></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preset Name Modal -->
+  <div id="presetNameModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="presetNameModalTitle">
+    <div class="modal-content" style="max-width: 380px;">
+      <div class="modal-header">
+        <h2 id="presetNameModalTitle" class="modal-title">
+          <span>💾</span>
+          <span>Save Preset</span>
+        </h2>
+        <button class="modal-close" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">Give your mix a name to save it as a custom preset:</p>
+        <input id="presetNameInput" type="text" placeholder="e.g. Late Night Focus" class="timer-input" style="width: 100%; margin-bottom: 16px;" />
+        <div style="display: flex; gap: 10px;">
+          <button id="btnConfirmSavePreset" class="btn-primary" style="flex: 1;">Save Preset</button>
+          <button id="btnCancelSavePreset" class="btn-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Share URL Fallback Modal -->
+  <div id="shareUrlModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="shareUrlModalTitle">
+    <div class="modal-content" style="max-width: 420px;">
+      <div class="modal-header">
+        <h2 id="shareUrlModalTitle" class="modal-title">
+          <span>🔗</span>
+          <span>Share Your Mix</span>
+        </h2>
+        <button class="modal-close" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Copy this link to share your current soundscape:</p>
+        <input id="shareUrlInput" type="text" class="timer-input" style="width: 100%; margin-bottom: 16px;" readonly />
+        <div style="display: flex; gap: 10px;">
+          <button id="btnCopyShareUrl" class="btn-primary" style="flex: 1;">Copy Link</button>
+          <button class="btn-secondary modal-close">Close</button>
         </div>
       </div>
     </div>

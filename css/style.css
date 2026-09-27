@@ -122,6 +122,8 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
   margin-bottom: 24px;
   padding: 14px 20px;
   background: var(--surface);
@@ -130,6 +132,21 @@ body::after {
   -webkit-backdrop-filter: blur(20px);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
+}
+
+/* Mobile: hide button text, keep icons */
+@media (max-width: 600px) {
+  .header-actions {
+    width: 100%;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+  .header-btn > span:not(:first-child):not([id]) {
+    display: none;
+  }
+  .header-btn {
+    padding: 8px 10px;
+  }
 }
 
 .brand {
@@ -528,6 +545,7 @@ body::after {
   justify-content: space-between;
   margin-bottom: 16px;
   padding: 0 4px;
+  gap: 12px;
 }
 
 .section-title {
@@ -541,14 +559,18 @@ body::after {
   gap: 8px;
 }
 
+.btn-reset {
+  flex-shrink: 0;
+}
 
+/* Auto-fill: 1 col on mobile, 2 on tablet, 3+ on desktop */
 .sounds-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   gap: 16px;
 }
 
-@media (max-width: 680px) {
+@media (max-width: 620px) {
   .sounds-grid {
     grid-template-columns: 1fr;
   }
@@ -632,9 +654,11 @@ body::after {
 .drag-handle {
   color: var(--text-muted);
   cursor: grab;
-  padding: 4px 2px;
+  padding: 6px 4px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  min-width: 26px;
   opacity: 0.4;
   transition: opacity var(--transition-fast);
 }
@@ -644,9 +668,19 @@ body::after {
 }
 
 .drag-handle svg {
-  width: 14px;
-  height: 14px;
+  width: 18px;
+  height: 18px;
   fill: currentColor;
+}
+
+/* Solo mode — amber accent */
+.sound-card.solo {
+  border-color: var(--accent-amber) !important;
+  box-shadow: 0 8px 28px rgba(251, 191, 36, 0.22) !important;
+}
+
+.sound-card.solo .sound-icon-box {
+  background: rgba(251, 191, 36, 0.08);
 }
 
 .sound-icon-box {
@@ -1022,6 +1056,100 @@ input[type="range"].modern-slider:active::-moz-range-thumb {
 
 .tab-pane.active {
   display: block;
+}
+
+/* ============================================================
+   Pomodoro Ring & Config
+   ============================================================ */
+
+.pomodoro-config {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+}
+
+.pomodoro-config-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: default;
+}
+
+.pomodoro-config-sep {
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+.pomodoro-duration-input {
+  width: 52px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 4px 8px;
+  text-align: center;
+  outline: none;
+  -moz-appearance: textfield;
+}
+.pomodoro-duration-input::-webkit-outer-spin-button,
+.pomodoro-duration-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+.pomodoro-duration-input:focus {
+  border-color: var(--accent-cyan);
+}
+
+/* SVG Progress Ring */
+.pomodoro-ring-wrap {
+  position: relative;
+  width: 168px;
+  height: 168px;
+  margin: 0 auto 24px;
+}
+
+.pomodoro-ring-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg); /* start from top */
+}
+
+.ring-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.06);
+  stroke-width: 8;
+}
+
+.ring-progress {
+  fill: none;
+  stroke: var(--accent-cyan);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 339.3;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.4s ease, stroke 0.3s ease;
+}
+
+.pomodoro-ring-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.pomodoro-digits {
+  font-size: 32px !important;
+  line-height: 1 !important;
 }
 
 /* Timer Options */
@@ -1485,4 +1613,20 @@ input[type="range"].modern-slider:active::-moz-range-thumb {
   border-color: rgba(0, 0, 0, 0.1);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
 }
+
+[data-theme="light"] .pomodoro-config {
+  background: rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .pomodoro-duration-input {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #0f172a;
+}
+
+[data-theme="light"] .ring-bg {
+  stroke: rgba(0, 0, 0, 0.08);
+}
+
 
