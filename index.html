@@ -76,6 +76,15 @@
           <span>Share</span>
         </button>
 
+        <button id="btnOpenSkins" class="header-btn" title="Change Skin">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="14" rx="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="18" x2="12" y2="21"></line>
+          </svg>
+          <span>Skin</span>
+        </button>
+
         <button id="btnToggleTheme" class="header-btn" title="Toggle Light/Dark Theme (D)" aria-label="Toggle theme">
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="5"></circle>
@@ -593,6 +602,41 @@
           <div class="shortcut-item"><span class="shortcut-desc">Close open pop-up panel</span><kbd class="kbd-badge">Esc</kbd></div>
           <div class="shortcut-item"><span class="shortcut-desc">Toggle Light / Dark mode</span><kbd class="kbd-badge">D</kbd></div>
           <div class="shortcut-item"><span class="shortcut-desc">Show this shortcuts guide</span><kbd class="kbd-badge">?</kbd></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skin Select Modal -->
+  <div id="skinModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="skinModalTitle">
+    <div class="modal-content" style="max-width: 420px;">
+      <div class="modal-header">
+        <h2 id="skinModalTitle" class="modal-title">
+          <span>🎨</span>
+          <span>Choose Skin</span>
+        </h2>
+        <button class="modal-close" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div id="skinOptionsList" class="skin-options">
+          <button class="skin-option" data-skin="default" type="button">
+            <span class="skin-option-swatch skin-swatch-default" aria-hidden="true"></span>
+            <span class="skin-option-info">
+              <span class="skin-option-name">Default</span>
+              <span class="skin-option-desc">Soft, glassy ambient studio look</span>
+            </span>
+            <span class="skin-option-check" aria-hidden="true">✓</span>
+          </button>
+          <button class="skin-option" data-skin="cliamp" type="button">
+            <span class="skin-option-swatch skin-swatch-cliamp" aria-hidden="true"></span>
+            <span class="skin-option-info">
+              <span class="skin-option-name">Cliamp</span>
+              <span class="skin-option-desc">Retro phosphor-green terminal player</span>
+            </span>
+            <span class="skin-option-check" aria-hidden="true">✓</span>
+          </button>
         </div>
       </div>
     </div>

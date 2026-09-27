@@ -80,6 +80,7 @@
   const LS_CUSTOM_PRESETS = 'noisee_custom_presets';
   const LS_THEME          = 'noisee_theme';
   const LS_SOUND_VOLS     = 'noisee_sound_vols';
+  const LS_SKIN           = 'noisee_skin';
 
   // =========================================================================
   // Audio Context — lazy, only created on first user gesture
@@ -436,25 +437,37 @@
       const w = canvas.width, h = canvas.height;
       ctx2d.clearRect(0, 0, w, h);
       const hasActive = getActiveSounds().length > 0;
+      const isCliamp  = document.documentElement.getAttribute('data-skin') === 'cliamp';
 
       if (hasActive) {
         analyserNode.getByteFrequencyData(dataArray);
-        const barCount = 48, barWidth = w / barCount;
-        const grad = ctx2d.createLinearGradient(0, h, w, 0);
-        grad.addColorStop(0, '#38bdf8'); grad.addColorStop(0.5, '#818cf8'); grad.addColorStop(1, '#c084fc');
-        ctx2d.fillStyle = grad;
+        const barCount = isCliamp ? 32 : 48, barWidth = w / barCount;
+
+        if (isCliamp) {
+          ctx2d.fillStyle = '#33ff66';
+        } else {
+          const grad = ctx2d.createLinearGradient(0, h, w, 0);
+          grad.addColorStop(0, '#38bdf8'); grad.addColorStop(0.5, '#818cf8'); grad.addColorStop(1, '#c084fc');
+          ctx2d.fillStyle = grad;
+        }
+
         for (let i = 0; i < barCount; i++) {
           const val = dataArray[Math.floor((i / barCount) * (bufLen / 2))] / 255;
           const bh  = Math.max(4, val * (h * 0.85));
           const x   = i * barWidth;
-          ctx2d.beginPath();
-          ctx2d.roundRect(x + 2, (h - bh) / 2, Math.max(1, barWidth - 4), bh, 4);
-          ctx2d.fill();
+          if (isCliamp) {
+            // Blocky stepped LED-meter segments, no anti-aliased rounding
+            ctx2d.fillRect(x + 2, (h - bh) / 2, Math.max(1, barWidth - 5), bh);
+          } else {
+            ctx2d.beginPath();
+            ctx2d.roundRect(x + 2, (h - bh) / 2, Math.max(1, barWidth - 4), bh, 4);
+            ctx2d.fill();
+          }
         }
       } else {
         waveOffset += 0.02;
         const isLight = document.documentElement.getAttribute('data-theme') === 'light';
-        ctx2d.strokeStyle = isLight ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.08)';
+        ctx2d.strokeStyle = isCliamp ? 'rgba(51,255,102,0.5)' : (isLight ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.08)');
         ctx2d.lineWidth   = 2 * window.devicePixelRatio;
         ctx2d.beginPath();
         for (let x = 0; x < w; x += 4) {
@@ -974,6 +987,7 @@
     });
 
     initTheme();
+    initSkin();
     initModals();
     initKeyboardShortcuts();
     loadMixFromHash();
@@ -1101,6 +1115,47 @@
     const saved = localStorage.getItem(LS_THEME);
     applyTheme(saved || (window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
     document.getElementById('btnToggleTheme')?.addEventListener('click', toggleTheme);
+  }
+
+  // =========================================================================
+  // Skins
+  // =========================================================================
+
+  function applySkin(skin) {
+    document.documentElement.setAttribute('data-skin', skin);
+    localStorage.setItem(LS_SKIN, skin);
+
+    document.querySelectorAll('.skin-option').forEach(opt => {
+      opt.classList.toggle('active', opt.dataset.skin === skin);
+    });
+
+    // Cliamp is a fixed phosphor-green terminal palette — the light/dark toggle doesn't apply
+    const themeBtn = document.getElementById('btnToggleTheme');
+    if (skin === 'cliamp') {
+      if (themeBtn) themeBtn.style.display = 'none';
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      if (themeBtn) themeBtn.style.display = '';
+      const savedTheme = localStorage.getItem(LS_THEME);
+      applyTheme(savedTheme || (window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
+    }
+  }
+
+  function initSkin() {
+    const saved = localStorage.getItem(LS_SKIN) || 'default';
+    applySkin(saved);
+
+    document.getElementById('btnOpenSkins')?.addEventListener('click', () => {
+      document.getElementById('skinModal')?.classList.add('open');
+    });
+
+    document.querySelectorAll('.skin-option').forEach(opt => {
+      opt.addEventListener('click', () => {
+        applySkin(opt.dataset.skin);
+        showToast(`Skin set to ${opt.querySelector('.skin-option-name')?.textContent || opt.dataset.skin}`);
+        document.getElementById('skinModal')?.classList.remove('open');
+      });
+    });
   }
 
   // =========================================================================

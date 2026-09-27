@@ -1635,4 +1635,537 @@ input[type="range"].modern-slider:active::-moz-range-thumb {
   stroke: rgba(0, 0, 0, 0.08);
 }
 
+/* ==========================================================================
+   Skin Picker Modal
+   ========================================================================== */
 
+.skin-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skin-option {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-fast);
+}
+
+.skin-option:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: var(--surface-border-hover);
+}
+
+.skin-option.active {
+  border-color: var(--accent-cyan);
+  background: rgba(56, 189, 248, 0.1);
+}
+
+.skin-option-swatch {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.skin-swatch-default {
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+}
+
+.skin-swatch-cliamp {
+  background-color: #050a06;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(51, 255, 102, 0.35) 0px, rgba(51, 255, 102, 0.35) 2px, transparent 2px, transparent 5px);
+  border-color: #1f3a20;
+}
+
+.skin-option-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.skin-option-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.skin-option-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.skin-option-check {
+  color: var(--accent-cyan);
+  font-weight: 700;
+  font-size: 16px;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.skin-option.active .skin-option-check {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   Cliamp Skin — retro phosphor-green terminal music player
+   ========================================================================== */
+
+:root[data-skin="cliamp"] {
+  --bg-primary: #050a06;
+  --bg-secondary: #050a06;
+  --surface: #0a120a;
+  --surface-hover: #0f1a0f;
+  --surface-active: #142214;
+  --surface-border: #1f3a20;
+  --surface-border-hover: #33ff66;
+
+  --text-primary: #baffb4;
+  --text-secondary: #5fae5f;
+  --text-muted: #3a6b3a;
+
+  --accent-cyan: #33ff66;
+  --accent-indigo: #33ff66;
+  --accent-purple: #ffb000;
+  --accent-emerald: #33ff66;
+  --accent-amber: #ffb000;
+  --accent-rose: #ff4444;
+
+  --grad-primary: linear-gradient(135deg, #33ff66 0%, #33ff66 100%);
+  --grad-play: linear-gradient(135deg, #33ff66 0%, #22cc55 100%);
+  --grad-stop: linear-gradient(135deg, #ff4444 0%, #cc1111 100%);
+
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --glow-primary: 0 0 8px rgba(51, 255, 102, 0.45);
+
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-full: 2px;
+
+  --transition-fast: 0.05s linear;
+  --transition-normal: 0.08s linear;
+  --transition-bounce: 0.08s linear;
+}
+
+[data-skin="cliamp"] body {
+  font-family: ui-monospace, 'SFMono-Regular', 'Cascadia Mono', 'Consolas', 'Liberation Mono', monospace;
+  background-color: #050a06;
+}
+
+[data-skin="cliamp"] body::before,
+[data-skin="cliamp"] body::after {
+  display: none;
+}
+
+[data-skin="cliamp"] .app-header,
+[data-skin="cliamp"] .master-deck,
+[data-skin="cliamp"] .sound-card,
+[data-skin="cliamp"] .modal-content,
+[data-skin="cliamp"] .visualizer-overlay,
+[data-skin="cliamp"] .toast {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: none;
+}
+
+[data-skin="cliamp"] .app-header,
+[data-skin="cliamp"] .master-deck,
+[data-skin="cliamp"] .sound-card {
+  border: 1px solid var(--surface-border);
+}
+
+[data-skin="cliamp"] .master-deck::before {
+  background: var(--accent-cyan);
+  opacity: 1;
+  height: 1px;
+}
+
+/* Brand */
+[data-skin="cliamp"] .brand-icon {
+  border-radius: 0;
+  box-shadow: none;
+  border: 1px solid var(--accent-cyan);
+}
+
+[data-skin="cliamp"] .brand-icon svg {
+  fill: #050a06;
+}
+
+[data-skin="cliamp"] .brand-text h1 {
+  background: none;
+  -webkit-text-fill-color: initial;
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+}
+
+[data-skin="cliamp"] .brand-text h1::before {
+  content: "> ";
+  color: var(--accent-amber);
+}
+
+[data-skin="cliamp"] .brand-text p {
+  color: var(--text-secondary);
+}
+
+/* Header buttons — reverse-video "TUI menu" style */
+[data-skin="cliamp"] .header-btn {
+  background: transparent;
+  border: 1px solid var(--surface-border);
+  border-radius: 0;
+  color: var(--text-secondary);
+}
+
+[data-skin="cliamp"] .header-btn::before {
+  content: "[";
+  margin-right: 5px;
+  opacity: 0.6;
+}
+
+[data-skin="cliamp"] .header-btn::after {
+  content: "]";
+  margin-left: 5px;
+  opacity: 0.6;
+}
+
+[data-skin="cliamp"] .header-btn:hover {
+  background: var(--accent-cyan);
+  color: #050a06;
+  transform: none;
+}
+
+[data-skin="cliamp"] .header-btn.active {
+  background: var(--accent-amber);
+  border-color: var(--accent-amber);
+  color: #050a06;
+}
+
+/* Visualizer */
+[data-skin="cliamp"] .visualizer-container {
+  background: #030603;
+  border: 1px solid var(--surface-border);
+  border-radius: 0;
+}
+
+[data-skin="cliamp"] .visualizer-overlay {
+  background: #030603;
+  border: 1px solid var(--surface-border);
+  border-radius: 0;
+  color: var(--text-secondary);
+}
+
+/* Master controls */
+[data-skin="cliamp"] .btn-master-play {
+  border-radius: 0;
+  border: 1px solid var(--accent-cyan);
+}
+
+[data-skin="cliamp"] .master-vol-group {
+  background: transparent;
+  border: 1px solid var(--surface-border);
+  border-radius: 0;
+}
+
+[data-skin="cliamp"] .master-status {
+  color: var(--text-secondary);
+}
+
+[data-skin="cliamp"] .preset-select,
+[data-skin="cliamp"] .btn-action {
+  background: transparent;
+  border: 1px solid var(--surface-border);
+  border-radius: 0;
+  color: var(--text-secondary);
+}
+
+[data-skin="cliamp"] .btn-action::before {
+  content: "[";
+  margin-right: 5px;
+  opacity: 0.6;
+}
+
+[data-skin="cliamp"] .btn-action::after {
+  content: "]";
+  margin-left: 5px;
+  opacity: 0.6;
+}
+
+[data-skin="cliamp"] .btn-action:hover {
+  background: var(--accent-cyan);
+  color: #050a06;
+}
+
+[data-skin="cliamp"] .preset-select option {
+  background: #050a06;
+  color: var(--text-primary);
+}
+
+[data-skin="cliamp"] .preset-select-wrap::after {
+  border-top-color: var(--text-secondary);
+}
+
+/* Sound cards */
+[data-skin="cliamp"] .section-title {
+  color: var(--text-secondary);
+}
+
+[data-skin="cliamp"] .sound-card:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent-cyan);
+  transform: none;
+}
+
+[data-skin="cliamp"] .sound-card.active,
+[data-skin="cliamp"] .sound-card[data-id].active {
+  background: #0a140a;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 10px rgba(51, 255, 102, 0.3);
+}
+
+[data-skin="cliamp"] .sound-card.solo {
+  border-color: var(--accent-amber) !important;
+  box-shadow: 0 0 10px rgba(255, 176, 0, 0.35) !important;
+}
+
+[data-skin="cliamp"] .sound-icon-box {
+  border-radius: 0;
+  border: 1px solid var(--surface-border);
+  background: transparent;
+}
+
+[data-skin="cliamp"] .sound-card.active .sound-icon-box {
+  border-color: var(--accent-cyan);
+  transform: none;
+}
+
+[data-skin="cliamp"] .btn-track-play {
+  border-radius: 0;
+  background: transparent;
+  border: 1px solid var(--surface-border);
+}
+
+[data-skin="cliamp"] .btn-track-play:hover {
+  background: var(--accent-cyan);
+  color: #050a06;
+  transform: none;
+}
+
+[data-skin="cliamp"] .sound-card.active .btn-track-play {
+  background: var(--accent-cyan);
+  color: #050a06;
+  box-shadow: none;
+}
+
+[data-skin="cliamp"] .track-vol-text {
+  color: var(--text-secondary);
+}
+
+[data-skin="cliamp"] .btn-track-play.loading::after {
+  border: 2px solid rgba(51, 255, 102, 0.25);
+  border-top-color: var(--accent-cyan);
+}
+
+/* Sliders — LED meter block style */
+[data-skin="cliamp"] input[type="range"].modern-slider::-webkit-slider-runnable-track {
+  height: 12px;
+  border-radius: 0;
+  background:
+    linear-gradient(to right, transparent 0%, transparent var(--slider-pct, 50%), var(--surface-border) var(--slider-pct, 50%), var(--surface-border) 100%),
+    repeating-linear-gradient(to right, #33ff66 0px, #33ff66 3px, transparent 3px, transparent 6px);
+}
+
+[data-skin="cliamp"] input[type="range"].modern-slider::-webkit-slider-thumb {
+  width: 8px;
+  height: 16px;
+  border-radius: 0;
+  background: var(--accent-cyan);
+  border: 1px solid #050a06;
+  box-shadow: 0 0 4px rgba(51, 255, 102, 0.7);
+  margin-top: -2px;
+}
+
+[data-skin="cliamp"] input[type="range"].modern-slider:hover::-webkit-slider-thumb,
+[data-skin="cliamp"] input[type="range"].modern-slider:active::-webkit-slider-thumb {
+  transform: none;
+  box-shadow: 0 0 8px rgba(51, 255, 102, 1);
+}
+
+[data-skin="cliamp"] input[type="range"].modern-slider::-moz-range-track {
+  height: 12px;
+  border-radius: 0;
+  background:
+    linear-gradient(to right, transparent 0%, transparent var(--slider-pct, 50%), var(--surface-border) var(--slider-pct, 50%), var(--surface-border) 100%),
+    repeating-linear-gradient(to right, #33ff66 0px, #33ff66 3px, transparent 3px, transparent 6px);
+}
+
+[data-skin="cliamp"] input[type="range"].modern-slider::-moz-range-thumb {
+  width: 8px;
+  height: 16px;
+  border-radius: 0;
+  background: var(--accent-cyan);
+  border: 1px solid #050a06;
+  box-shadow: 0 0 4px rgba(51, 255, 102, 0.7);
+}
+
+[data-skin="cliamp"] input[type="range"].modern-slider:hover::-moz-range-thumb,
+[data-skin="cliamp"] input[type="range"].modern-slider:active::-moz-range-thumb {
+  transform: none;
+  box-shadow: 0 0 8px rgba(51, 255, 102, 1);
+}
+
+/* Modals */
+[data-skin="cliamp"] .modal-backdrop {
+  background: rgba(3, 6, 3, 0.85);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+[data-skin="cliamp"] .modal-content {
+  background: #050a06;
+  border: 1px solid var(--accent-cyan);
+  border-radius: 0;
+}
+
+[data-skin="cliamp"] .modal-title {
+  color: var(--accent-cyan);
+  text-transform: uppercase;
+}
+
+[data-skin="cliamp"] .modal-close:hover {
+  color: var(--accent-cyan);
+}
+
+[data-skin="cliamp"] .modal-tabs {
+  background: transparent;
+  border: 1px solid var(--surface-border);
+  border-radius: 0;
+}
+
+[data-skin="cliamp"] .modal-tab-btn {
+  border-radius: 0;
+}
+
+[data-skin="cliamp"] .modal-tab-btn.active {
+  background: var(--accent-cyan);
+  color: #050a06;
+  box-shadow: none;
+}
+
+[data-skin="cliamp"] .timer-pill-btn,
+[data-skin="cliamp"] .timer-input,
+[data-skin="cliamp"] .pomodoro-duration-input,
+[data-skin="cliamp"] .pomodoro-config {
+  background: transparent;
+  border: 1px solid var(--surface-border);
+  border-radius: 0;
+  color: var(--text-primary);
+}
+
+[data-skin="cliamp"] .timer-pill-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent-cyan);
+}
+
+[data-skin="cliamp"] .timer-pill-btn.active {
+  background: var(--accent-cyan);
+  border-color: var(--accent-cyan);
+  color: #050a06;
+}
+
+[data-skin="cliamp"] .active-timer-card {
+  background: transparent;
+  border: 1px solid var(--accent-cyan);
+  border-radius: 0;
+}
+
+[data-skin="cliamp"] .timer-digits {
+  background: none;
+  -webkit-text-fill-color: initial;
+  color: var(--accent-cyan);
+}
+
+[data-skin="cliamp"] .ring-bg {
+  stroke: var(--surface-border);
+}
+
+[data-skin="cliamp"] .modal-footer {
+  background: transparent;
+  border-color: var(--surface-border);
+}
+
+[data-skin="cliamp"] .btn-primary {
+  background: var(--accent-cyan);
+  color: #050a06;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+[data-skin="cliamp"] .btn-primary:hover {
+  opacity: 0.85;
+  transform: none;
+}
+
+[data-skin="cliamp"] .btn-secondary {
+  background: transparent;
+  border: 1px solid var(--surface-border);
+  border-radius: 0;
+}
+
+[data-skin="cliamp"] .btn-secondary:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent-cyan);
+  color: var(--text-primary);
+}
+
+[data-skin="cliamp"] .kbd-badge {
+  background: transparent;
+  border: 1px solid var(--surface-border);
+  box-shadow: none;
+  border-radius: 0;
+  color: var(--accent-cyan);
+}
+
+[data-skin="cliamp"] .toast {
+  background: #050a06;
+  border: 1px solid var(--accent-cyan);
+  border-radius: 0;
+  color: var(--text-primary);
+}
+
+[data-skin="cliamp"] .toast::before {
+  content: "> ";
+  color: var(--accent-cyan);
+}
+
+/* Skin picker itself, when viewed in cliamp */
+[data-skin="cliamp"] .skin-option {
+  background: transparent;
+  border: 1px solid var(--surface-border);
+  border-radius: 0;
+}
+
+[data-skin="cliamp"] .skin-option:hover {
+  border-color: var(--accent-cyan);
+}
+
+[data-skin="cliamp"] .skin-option.active {
+  border-color: var(--accent-cyan);
+  background: var(--surface-hover);
+}
+
+[data-skin="cliamp"] .skin-option-swatch {
+  border-radius: 0;
+}
