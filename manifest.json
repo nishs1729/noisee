@@ -1,0 +1,17 @@
+{
+  "name": "Noisee - Ambient Sound Studio",
+  "short_name": "Noisee",
+  "description": "Mix soothing background soundscapes for focus, sleep, and relaxation.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#090d16",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

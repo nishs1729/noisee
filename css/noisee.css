@@ -1,0 +1,58 @@
+.container {
+  max-width: 600px;
+}
+
+.card {
+  margin-top: 12px;
+}
+
+h1 {
+  margin: 0;
+}
+
+.sound-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: grab;
+}
+
+.icon {
+  font-size: 26px;
+}
+
+.controls {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.name {
+  flex: 0 0 80px;
+}
+
+@media (max-width: 400px) {
+  .name {
+  display: none;
+  }
+}
+
+input[type=range] {
+  flex: 1;
+  width: 100%;
+}
+
+.small {
+  font-size: 13px;
+  color: #666; /* Light default */
+  margin-top: 12px;
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] .small {
+  color: #bbb;
+}

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Noisee — Ambient Soundscape Studio</title>
+  <meta name="description" content="Mix soothing background soundscapes to focus, relax, and sleep. Standalone ambient sound generator with presets, timers, and offline support." />
+  <meta name="theme-color" content="#07090e" />
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app-wrapper">
+    <!-- Top Application Bar -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24">
+            <rect x="2" y="10" width="3" height="4" rx="1.5"></rect>
+            <rect x="7" y="6" width="3" height="12" rx="1.5"></rect>
+            <rect x="12" y="3" width="3" height="18" rx="1.5"></rect>
+            <rect x="17" y="7" width="3" height="10" rx="1.5"></rect>
+            <rect x="22" y="10" width="3" height="4" rx="1.5"></rect>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>Noisee</h1>
+          <p>Ambient Soundscape Studio</p>
+        </div>
+      </div>
+
+      <nav class="header-actions">
+        <!-- Live Timer Badge (hidden when no timer active) -->
+        <button id="timerStatusBadge" class="header-btn active" style="display: none;" title="Timer in progress">
+          <span>🌙</span>
+          <span id="timerBadgeText">00:00</span>
+        </button>
+
+        <button id="btnOpenTimer" class="header-btn" title="Open Timer & Pomodoro">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>Timer</span>
+        </button>
+
+        <button id="btnRandomize" class="header-btn" title="Surprise Me (R)">
+          <span>🎲</span>
+          <span>Surprise Me</span>
+        </button>
+
+        <button id="btnShareMix" class="header-btn" title="Copy Shareable Link">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+          <span>Share</span>
+        </button>
+
+        <button id="btnOpenShortcuts" class="header-btn" title="Keyboard Shortcuts (?)">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Master Control Deck -->
+    <section class="master-deck" aria-label="Master Controls">
+      <!-- Real-time Visualizer -->
+      <div class="visualizer-container">
+        <canvas id="visualizerCanvas"></canvas>
+        <div class="visualizer-overlay">
+          <span class="visualizer-dot"></span>
+          <span id="visualizerStatusText">Quiet</span>
+        </div>
+      </div>
+
+      <div class="master-controls">
+        <!-- Main Play/Pause & Meta -->
+        <div class="main-play-group">
+          <button id="btnMasterPlay" class="btn-master-play" aria-label="Play Master Mix" title="Play / Pause (Space)">
+            <svg viewBox="0 0 24 24">
+              <polygon points="6 4 20 12 6 20 6 4"></polygon>
+            </svg>
+          </button>
+          <div class="master-meta">
+            <div class="master-title">Master Output</div>
+            <div id="masterStatus" class="master-status">Ready to play</div>
+          </div>
+        </div>
+
+        <!-- Master Volume -->
+        <div class="master-vol-group">
+          <button id="btnMute" class="vol-icon-btn" aria-label="Mute toggle" title="Mute / Unmute (M)">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+          </button>
+          <div class="master-slider-wrap">
+            <input id="masterVolume" type="range" min="0" max="1" step="0.01" value="0.5" class="modern-slider" aria-label="Master Volume" />
+            <span id="masterVolPct" class="vol-pct">50%</span>
+          </div>
+        </div>
+
+        <!-- Presets & Quick Actions -->
+        <div class="master-actions">
+          <div class="preset-select-wrap">
+            <select id="presetSelect" class="preset-select" aria-label="Choose soundscape preset">
+              <option value="" disabled selected>Select a Preset...</option>
+            </select>
+          </div>
+
+          <button id="btnSavePreset" class="btn-action" title="Save current mix as preset">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+              <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+            <span>Save Mix</span>
+          </button>
+
+          <button id="btnStopAll" class="btn-action btn-stop-all" title="Stop All Sounds (S)">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+            </svg>
+            <span>Stop All</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Soundscape Elements Grid -->
+    <main>
+      <div class="section-head">
+        <h2 class="section-title">
+          <span>Ambient Elements</span>
+        </h2>
+        <span class="section-hint">Drag cards to reorder • Click anywhere on card to toggle</span>
+      </div>
+
+      <div id="soundsGrid" class="sounds-grid">
+        <!-- Rain -->
+        <article class="sound-card" draggable="true" data-id="rain">
+          <div class="drag-handle" title="Drag to reorder"></div>
+          <div class="sound-icon-box">🌧️</div>
+          <div class="sound-controls">
+            <div class="sound-info">
+              <div class="sound-name">
+                <span>Rain</span>
+                <div class="mini-equalizer">
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                </div>
+              </div>
+              <span class="track-vol-text">60%</span>
+            </div>
+            <div class="sound-ctrl-row">
+              <button class="btn-track-play" aria-label="Play Rain">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="slider-container">
+                <input type="range" min="0" max="1" step="0.01" value="0.6" class="modern-slider sound-vol-slider" aria-label="Rain volume" />
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- River -->
+        <article class="sound-card" draggable="true" data-id="river">
+          <div class="drag-handle" title="Drag to reorder"></div>
+          <div class="sound-icon-box">🏞️</div>
+          <div class="sound-controls">
+            <div class="sound-info">
+              <div class="sound-name">
+                <span>River</span>
+                <div class="mini-equalizer">
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                </div>
+              </div>
+              <span class="track-vol-text">50%</span>
+            </div>
+            <div class="sound-ctrl-row">
+              <button class="btn-track-play" aria-label="Play River">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="slider-container">
+                <input type="range" min="0" max="1" step="0.01" value="0.5" class="modern-slider sound-vol-slider" aria-label="River volume" />
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Wind -->
+        <article class="sound-card" draggable="true" data-id="wind">
+          <div class="drag-handle" title="Drag to reorder"></div>
+          <div class="sound-icon-box">🌬️</div>
+          <div class="sound-controls">
+            <div class="sound-info">
+              <div class="sound-name">
+                <span>Wind</span>
+                <div class="mini-equalizer">
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                </div>
+              </div>
+              <span class="track-vol-text">40%</span>
+            </div>
+            <div class="sound-ctrl-row">
+              <button class="btn-track-play" aria-label="Play Wind">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="slider-container">
+                <input type="range" min="0" max="1" step="0.01" value="0.4" class="modern-slider sound-vol-slider" aria-label="Wind volume" />
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Fire -->
+        <article class="sound-card" draggable="true" data-id="fire">
+          <div class="drag-handle" title="Drag to reorder"></div>
+          <div class="sound-icon-box">🔥</div>
+          <div class="sound-controls">
+            <div class="sound-info">
+              <div class="sound-name">
+                <span>Fire</span>
+                <div class="mini-equalizer">
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                </div>
+              </div>
+              <span class="track-vol-text">70%</span>
+            </div>
+            <div class="sound-ctrl-row">
+              <button class="btn-track-play" aria-label="Play Fire">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="slider-container">
+                <input type="range" min="0" max="1" step="0.01" value="0.7" class="modern-slider sound-vol-slider" aria-label="Fire volume" />
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Birds -->
+        <article class="sound-card" draggable="true" data-id="birds">
+          <div class="drag-handle" title="Drag to reorder"></div>
+          <div class="sound-icon-box">🦜</div>
+          <div class="sound-controls">
+            <div class="sound-info">
+              <div class="sound-name">
+                <span>Birds</span>
+                <div class="mini-equalizer">
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                </div>
+              </div>
+              <span class="track-vol-text">50%</span>
+            </div>
+            <div class="sound-ctrl-row">
+              <button class="btn-track-play" aria-label="Play Birds">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="slider-container">
+                <input type="range" min="0" max="1" step="0.01" value="0.5" class="modern-slider sound-vol-slider" aria-label="Birds volume" />
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Night Birds -->
+        <article class="sound-card" draggable="true" data-id="night-birds">
+          <div class="drag-handle" title="Drag to reorder"></div>
+          <div class="sound-icon-box">🦉</div>
+          <div class="sound-controls">
+            <div class="sound-info">
+              <div class="sound-name">
+                <span>Night Birds</span>
+                <div class="mini-equalizer">
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                </div>
+              </div>
+              <span class="track-vol-text">40%</span>
+            </div>
+            <div class="sound-ctrl-row">
+              <button class="btn-track-play" aria-label="Play Night Birds">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="slider-container">
+                <input type="range" min="0" max="1" step="0.01" value="0.4" class="modern-slider sound-vol-slider" aria-label="Night Birds volume" />
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Cicada -->
+        <article class="sound-card" draggable="true" data-id="cicada">
+          <div class="drag-handle" title="Drag to reorder"></div>
+          <div class="sound-icon-box">🦗</div>
+          <div class="sound-controls">
+            <div class="sound-info">
+              <div class="sound-name">
+                <span>Cicada</span>
+                <div class="mini-equalizer">
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                </div>
+              </div>
+              <span class="track-vol-text">30%</span>
+            </div>
+            <div class="sound-ctrl-row">
+              <button class="btn-track-play" aria-label="Play Cicada">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="slider-container">
+                <input type="range" min="0" max="1" step="0.01" value="0.3" class="modern-slider sound-vol-slider" aria-label="Cicada volume" />
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Sea -->
+        <article class="sound-card" draggable="true" data-id="sea">
+          <div class="drag-handle" title="Drag to reorder"></div>
+          <div class="sound-icon-box">🌊</div>
+          <div class="sound-controls">
+            <div class="sound-info">
+              <div class="sound-name">
+                <span>Sea</span>
+                <div class="mini-equalizer">
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                  <div class="eq-bar"></div>
+                </div>
+              </div>
+              <span class="track-vol-text">60%</span>
+            </div>
+            <div class="sound-ctrl-row">
+              <button class="btn-track-play" aria-label="Play Sea">
+                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+              </button>
+              <div class="slider-container">
+                <input type="range" min="0" max="1" step="0.01" value="0.6" class="modern-slider sound-vol-slider" aria-label="Sea volume" />
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>Noisee Studio • Crafted for deep work, relaxation & serene sleep.</p>
+      <div class="footer-links">
+        <button id="footerShortcutsLink">Keyboard Shortcuts</button>
+        <span>•</span>
+        <span>100% Offline & Private</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Timer & Pomodoro Modal -->
+  <div id="timerModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="timerModalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="timerModalTitle" class="modal-title">
+          <span>⏱️</span>
+          <span>Timers & Productivity</span>
+        </h2>
+        <button class="modal-close" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-tabs">
+          <button class="modal-tab-btn active" data-tab="tabSleep">🌙 Sleep Timer</button>
+          <button class="modal-tab-btn" data-tab="tabPomodoro">🎯 Pomodoro Focus</button>
+        </div>
+
+        <!-- Sleep Timer Pane -->
+        <div id="tabSleep" class="tab-pane active">
+          <!-- Active countdown if running -->
+          <div id="sleepCountdownDisplay" class="active-timer-card" style="display: none;">
+            <div id="sleepTimeRemaining" class="timer-digits">00:00</div>
+            <div class="timer-label">Time remaining until gentle stop</div>
+          </div>
+
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 14px;">Select how long before sounds automatically stop:</p>
+          <div class="timer-pill-group">
+            <button class="timer-pill-btn" data-min="15">15 min</button>
+            <button class="timer-pill-btn active" data-min="30">30 min</button>
+            <button class="timer-pill-btn" data-min="45">45 min</button>
+            <button class="timer-pill-btn" data-min="60">60 min</button>
+          </div>
+
+          <div class="timer-custom-wrap">
+            <input id="customSleepMinutes" type="number" min="1" max="720" placeholder="Custom minutes (e.g. 90)" class="timer-input" />
+          </div>
+
+          <label class="toggle-label">
+            <input id="chkSleepFadeOut" type="checkbox" checked />
+            <span>Smooth 30-second volume fade-out before stopping</span>
+          </label>
+
+          <div style="display: flex; gap: 10px;">
+            <button id="btnStartSleepTimer" class="btn-primary" style="flex: 1;">Start Sleep Timer</button>
+            <button id="btnCancelSleepTimer" class="btn-secondary">Cancel Active Timer</button>
+          </div>
+        </div>
+
+        <!-- Pomodoro Pane -->
+        <div id="tabPomodoro" class="tab-pane">
+          <div class="active-timer-card">
+            <div id="pomodoroTimeDigits" class="timer-digits">25:00</div>
+            <div id="pomodoroModeLabel" class="timer-label">Focus Session</div>
+          </div>
+
+          <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; text-align: center;">
+            25 minutes of deep focus followed by a 5-minute rejuvenating break.
+          </p>
+
+          <div style="display: flex; gap: 10px; justify-content: center;">
+            <button id="btnStartPomodoro" class="btn-primary">Start Focus</button>
+            <button id="btnResetPomodoro" class="btn-secondary">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Keyboard Shortcuts Modal -->
+  <div id="shortcutsModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="shortcutsModalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="shortcutsModalTitle" class="modal-title">
+          <span>⌨️</span>
+          <span>Keyboard Shortcuts</span>
+        </h2>
+        <button class="modal-close" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="shortcut-list">
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Master Play / Pause active mix</span>
+            <kbd class="kbd-badge">Space</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Master Mute / Unmute</span>
+            <kbd class="kbd-badge">M</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Surprise / Randomize mix</span>
+            <kbd class="kbd-badge">R</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Stop all playing sounds</span>
+            <kbd class="kbd-badge">S</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Open Timers (Sleep & Pomodoro)</span>
+            <kbd class="kbd-badge">T</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Toggle individual sounds (1 to 8)</span>
+            <kbd class="kbd-badge">1 - 8</kbd>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-desc">Show this shortcuts guide</span>
+            <kbd class="kbd-badge">?</kbd>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Toast Notifications -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Main JavaScript Controller -->
+  <script src="js/app.js"></script>
+</body>
+</html>
